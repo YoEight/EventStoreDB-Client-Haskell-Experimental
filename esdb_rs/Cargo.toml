@@ -11,5 +11,5 @@ crate-type = ['staticlib']
 
 [dependencies]
 libc = "0.2"
-eventstore = { git = "https://github.com/EventStore/EventStoreDB-Client-Rust.git", branch = "master" }
+eventstore = { git = "https://github.com/YoEight/EventStoreDB-Client-Rust-Experimental.git", branch = "facilited-ffi" }
 tokio = { version = "1", default-features = false, features = ["rt-multi-thread"] }

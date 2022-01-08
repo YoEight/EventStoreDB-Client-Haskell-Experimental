@@ -27,9 +27,15 @@ pub extern "C" fn create_es_env(conn_string: *const c_char) -> *mut ES_Env {
         let conn_string = CStr::from_ptr(conn_string);
         if let Ok(conn_string) = conn_string.to_str() {
             if let Ok(setts) = conn_string.parse() {
-                let client = eventstore::Client::new(setts).expect("Invalid environment");
+                let runtime = tokio::runtime::Builder::new_multi_thread()
+                    .enable_all()
+                    .build()
+                    .expect("Can't create a runtime");
+
+                let handle = runtime.handle().clone();
+                let client = eventstore::Client::with_runtime_handle(handle, setts)
+                    .expect("Invalid environment");
                 let client = Box::into_raw(Box::new(client));
-                let runtime = Runtime::new().expect("Can't create a proper runtime");
                 let runtime = Box::into_raw(Box::new(runtime));
 
                 return Box::into_raw(Box::new(ES_Env { runtime, client }));
