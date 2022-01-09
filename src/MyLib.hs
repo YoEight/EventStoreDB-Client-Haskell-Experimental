@@ -1,10 +1,21 @@
+{-# LANGUAGE StrictData #-}
+
 module MyLib (printString, createClient, Client) where
 
+import Data.ByteString (ByteString)
 import Foreign
 import Foreign.C.String
 import Foreign.C.Types
+import Foreign.Storable
 
 data EsEnv
+
+data EventData = EventData
+  { eventDataEventType :: String,
+    eventDataPayload :: ByteString
+  }
+
+instance Storable EventData
 
 newtype Client = Client (Ptr EsEnv)
 
